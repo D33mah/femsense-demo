@@ -1,448 +1,563 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FemSense - افحصي اليوم.. اطمئني غداً</title>
-    <!-- استيراد الخطوط والهوية البصرية -->
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #d84378;
-            --primary-light: #fce4ec;
-            --secondary-color: #2c3e50;
-            --bg-color: #f4f7f6;
-            --card-bg: #ffffff;
-            --text-color: #2d3748;
-            --gray-text: #718096;
-            --border-radius: 16px;
-            --success-color: #38a169;
-            --warning-color: #dd6b20;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FemSense | افحصي اليوم.. اطمئني غداً</title>
+<style>
+:root{
+  --rose:#d94f7d;
+  --rose-dark:#b93663;
+  --rose-soft:#fff0f5;
+  --rose-softer:#fff8fb;
+  --ink:#172033;
+  --muted:#778196;
+  --line:#e9edf3;
+  --surface:#ffffff;
+  --bg:#f6f7fb;
+  --green:#26966f;
+  --green-soft:#e9f8f1;
+  --amber:#c78325;
+  --amber-soft:#fff5e5;
+  --red:#c84d5f;
+  --red-soft:#fff0f1;
+  --blue:#5575c9;
+  --shadow:0 18px 50px rgba(25,32,51,.09);
+  --radius:22px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  min-height:100vh;
+  background:radial-gradient(circle at 10% 0%,#fff 0 22%,transparent 45%),var(--bg);
+  color:var(--ink);
+  font-family:Tahoma,"Segoe UI",Arial,sans-serif;
+  padding:22px;
+}
+button,input{font:inherit}
+button{cursor:pointer}
+.app{
+  width:min(1180px,100%);
+  margin:auto;
+  min-height:calc(100vh - 44px);
+  background:var(--surface);
+  border:1px solid #edf0f5;
+  border-radius:30px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.topbar{
+  min-height:76px;
+  padding:16px 28px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  border-bottom:1px solid var(--line);
+  background:rgba(255,255,255,.92);
+  backdrop-filter:blur(12px);
+}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-logo-img{
+  width:42px;height:42px;border-radius:14px;
+  object-fit:contain;
+  background:linear-gradient(145deg,var(--rose),#ef7fa4);
+  padding:4px;
+  box-shadow:0 9px 22px rgba(217,79,125,.24);
+}
+.brand h1{font-size:20px;letter-spacing:.2px}
+.brand p{font-size:11px;color:var(--muted);margin-top:3px}
+.top-actions{display:flex;align-items:center;gap:9px}
+.icon-btn{
+  width:40px;height:40px;border:1px solid var(--line);background:#fff;
+  border-radius:12px;color:var(--muted)
+}
+.profile{
+  display:flex;align-items:center;gap:9px;
+  padding:7px 11px;border:1px solid var(--line);border-radius:14px;
+  font-size:12px;color:var(--ink);background:#fff
+}
+.avatar{width:28px;height:28px;border-radius:10px;background:var(--rose-soft);display:grid;place-items:center;color:var(--rose);font-weight:800}
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Tajawal', sans-serif;
-        }
+.layout{display:grid;grid-template-columns:215px 1fr;min-height:760px}
+.sidebar{
+  background:#fcfcfe;border-left:1px solid var(--line);
+  padding:22px 14px;display:flex;flex-direction:column;gap:8px
+}
+.side-label{font-size:10px;color:#a0a7b6;font-weight:800;padding:8px 12px 5px}
+.nav-btn{
+  border:0;background:transparent;color:#687287;
+  width:100%;padding:12px;border-radius:13px;
+  display:flex;align-items:center;gap:10px;text-align:right;font-size:13px
+}
+.nav-btn:hover{background:#f7f8fb}
+.nav-btn.active{background:var(--rose-soft);color:var(--rose);font-weight:800}
+.nav-icon{width:25px;text-align:center;font-size:16px}
+.side-note{
+  margin-top:auto;padding:14px;border:1px solid #f1dce4;border-radius:17px;
+  background:linear-gradient(145deg,#fff8fb,#fff);
+}
+.side-note strong{font-size:12px;display:block;margin-bottom:5px}
+.side-note p{font-size:10px;color:var(--muted);line-height:1.7}
+.content{padding:28px;overflow:hidden}
+.screen{display:none}
+.screen.active{display:block;animation:enter .32s ease}
+@keyframes enter{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
+.hero{
+  display:flex;justify-content:space-between;align-items:flex-start;gap:20px;
+  margin-bottom:22px
+}
+.eyebrow{
+  color:var(--rose);font-size:11px;font-weight:900;
+  letter-spacing:.4px;margin-bottom:7px
+}
+.hero h2{font-size:27px;line-height:1.35;margin-bottom:7px}
+.hero p{color:var(--muted);font-size:12px;line-height:1.8;max-width:620px}
+.sync-pill{
+  display:flex;align-items:center;gap:7px;padding:9px 12px;border-radius:99px;
+  background:var(--green-soft);color:var(--green);font-size:11px;font-weight:800;
+  white-space:nowrap
+}
+.dot{width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 0 5px rgba(38,150,111,.09)}
 
-        .container {
-            width: 100%;
-            max-width: 480px;
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: var(--border-radius);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-            position: relative;
-        }
+.grid{display:grid;gap:14px}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.card{
+  background:#fff;border:1px solid var(--line);border-radius:19px;
+  padding:17px;box-shadow:0 7px 25px rgba(25,32,51,.035)
+}
+.card-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+.card-title h3{font-size:13px}
+.card-title span{font-size:10px;color:var(--muted)}
+.metric{position:relative;overflow:hidden}
+.metric:after{
+  content:"";position:absolute;width:70px;height:70px;border-radius:50%;
+  background:var(--rose-soft);left:-25px;bottom:-25px
+}
+.metric-label{font-size:10px;color:var(--muted);margin-bottom:8px}
+.metric-value{font-size:22px;font-weight:900}
+.metric-value small{font-size:11px;font-weight:700;color:var(--muted)}
+.metric-sub{font-size:10px;color:var(--green);margin-top:5px}
+.metric-sub.amber{color:var(--amber)}
 
-        /* الهيدر الموحد والشعار الجديد */
-        .brand-header {
-            text-align: center;
-            margin-bottom: 25px;
-            border-bottom: 1px solid #edf2f7;
-            padding-bottom: 15px;
-        }
+.alert{
+  padding:15px 17px;border-radius:18px;display:flex;align-items:center;justify-content:space-between;gap:15px;
+  margin-bottom:14px;border:1px solid
+}
+.alert.warning{background:var(--amber-soft);border-color:#f3dfbb}
+.alert.good{background:var(--green-soft);border-color:#ccecdf}
+.alert-main{display:flex;align-items:center;gap:12px}
+.alert-icon{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;background:#fff;font-size:18px}
+.alert h3{font-size:13px;margin-bottom:4px}
+.alert p{font-size:10px;color:var(--muted);line-height:1.6}
+.status-tag{padding:6px 9px;border-radius:9px;background:#fff;font-size:10px;font-weight:800;color:var(--amber);white-space:nowrap}
 
-        /* أيقونة الشعار الرسمية المستوحاة من الصورة */
-        .logo-icon {
-            width: 55px;
-            height: 55px;
-            margin: 0 auto 8px auto;
-            background-color: var(--primary-light);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary-color);
-            font-size: 24px;
-        }
+.breast-wrap{
+  min-height:285px;border-radius:16px;background:
+  radial-gradient(circle at 50% 35%,rgba(217,79,125,.07),transparent 48%),#fbfcfe;
+  border:1px solid #eef1f5;position:relative;display:grid;place-items:center;overflow:hidden
+}
+.chest{
+  width:290px;height:190px;position:relative;display:flex;gap:7px;align-items:center;justify-content:center
+}
+.breast{
+  width:122px;height:142px;position:relative;
+  background:radial-gradient(circle at 45% 42%,#ffd5e0 0 13%,#f7b3c5 34%,#f39ab5 64%,#ee8aa9 100%);
+  border-radius:54% 46% 51% 49% / 48% 48% 52% 52%;
+  box-shadow:inset 0 0 24px rgba(255,255,255,.35),0 8px 20px rgba(217,79,125,.12)
+}
+.breast.left{transform:rotate(8deg)}
+.breast.right{transform:rotate(-8deg)}
+.nipple{position:absolute;width:18px;height:18px;border-radius:50%;background:#d87491;left:50%;top:52%;transform:translate(-50%,-50%);box-shadow:0 0 0 8px rgba(255,255,255,.13)}
+.quadrant{
+  position:absolute;width:34px;height:34px;border-radius:50%;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.45);
+}
+.q1{top:18px;right:15px}.q2{top:18px;left:15px}.q3{bottom:18px;right:15px}.q4{bottom:18px;left:15px}
+.hotspot{
+  position:absolute;width:29px;height:29px;border-radius:50%;
+  background:rgba(194,66,93,.78);right:20px;top:29px;
+  box-shadow:0 0 0 8px rgba(194,66,93,.10),0 0 18px rgba(194,66,93,.35);
+  animation:pulse 2.2s infinite
+}
+@keyframes pulse{50%{transform:scale(1.08);opacity:.78}}
+.map-legend{
+  position:absolute;bottom:10px;right:12px;left:12px;display:flex;justify-content:space-between;
+  color:var(--muted);font-size:9px
+}
+.legend-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-left:4px;background:#ef8ba7}
+.legend-dot.gray{background:#d8dee8}
 
-        .brand-header h1 {
-            color: #1a202c;
-            font-size: 28px;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-        }
+.bars{height:155px;display:flex;align-items:flex-end;gap:9px;padding:12px 3px 3px;border-bottom:1px solid var(--line)}
+.bar-col{flex:1;height:100%;display:flex;align-items:flex-end;position:relative}
+.bar{
+  width:100%;border-radius:7px 7px 2px 2px;
+  background:linear-gradient(180deg,#ed8baa,#f8d1dc);min-height:18px
+}
+.bar.hot{background:linear-gradient(180deg,var(--rose),#ef9ab5)}
+.days{display:flex;gap:9px;padding:7px 3px 0;color:#9aa2b1;font-size:9px}
+.days span{flex:1;text-align:center}
 
-        .brand-slogan-main {
-            color: var(--primary-color);
-            font-size: 15px;
-            font-weight: 700;
-            margin-top: 6px;
-        }
+.progress{
+  height:7px;background:#f0f2f6;border-radius:99px;overflow:hidden;margin-top:9px
+}
+.progress i{display:block;height:100%;width:78%;background:linear-gradient(90deg,#e66f98,var(--rose));border-radius:99px}
+.small-row{display:flex;justify-content:space-between;align-items:center;font-size:10px;color:var(--muted)}
+.small-row strong{color:var(--ink)}
 
-        .brand-slogan-sub {
-            color: var(--gray-text);
-            font-size: 11px;
-            margin-top: 2px;
-            font-weight: 500;
-        }
+.sensor-row{display:flex;gap:9px}
+.sensor{
+  flex:1;padding:12px;border-radius:14px;background:#fafbfc;border:1px solid #eef0f4
+}
+.sensor-icon{font-size:17px;margin-bottom:7px}
+.sensor h4{font-size:11px;margin-bottom:4px}
+.sensor p{font-size:9px;color:var(--muted);line-height:1.5}
+.sensor strong{font-size:16px;display:block;margin-top:6px}
 
-        /* إدارة الشاشات (تبديل المراحل الـ 3) */
-        .screen {
-            display: none;
-        }
+.timeline{display:flex;flex-direction:column;gap:12px}
+.event{display:grid;grid-template-columns:45px 1fr auto;gap:10px;align-items:center}
+.event-date{font-size:9px;color:var(--muted);text-align:center}
+.event-icon{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:var(--rose-soft);color:var(--rose)}
+.event h4{font-size:11px;margin-bottom:3px}.event p{font-size:9px;color:var(--muted)}
+.event-tag{font-size:9px;padding:5px 7px;border-radius:8px;background:var(--green-soft);color:var(--green)}
 
-        .screen.active {
-            display: block;
-            animation: fadeIn 0.4s ease-in-out;
-        }
+.btn{
+  border:0;border-radius:13px;padding:12px 16px;background:linear-gradient(135deg,var(--rose),#e66b96);
+  color:#fff;font-weight:800;font-size:12px;box-shadow:0 8px 20px rgba(217,79,125,.18)
+}
+.btn:hover{background:linear-gradient(135deg,var(--rose-dark),var(--rose))}
+.btn.secondary{background:#fff;color:var(--ink);border:1px solid var(--line);box-shadow:none}
+.btn.ghost{background:var(--rose-soft);color:var(--rose);box-shadow:none}
+.btn.full{width:100%}
+.actions{display:flex;gap:9px;flex-wrap:wrap}
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+.login{
+  max-width:480px;margin:40px auto 0
+}
+.login .brand-big{text-align:center;margin-bottom:28px}
+.login-logo{
+  width:min(260px,72vw);
+  height:auto;
+  display:block;
+  margin:0 auto 10px;
+  object-fit:contain;
+}
+.login h2{text-align:center;font-size:25px;margin-bottom:6px}.login-sub{text-align:center;color:var(--muted);font-size:11px;line-height:1.8}
+.form{margin-top:26px}.field{margin-bottom:14px}.field label{display:block;font-size:11px;font-weight:800;margin-bottom:7px}
+.field input{width:100%;border:1px solid var(--line);border-radius:13px;padding:13px;background:#fff;outline:none;font-size:12px}
+.field input:focus{border-color:#e58ba7;box-shadow:0 0 0 4px var(--rose-soft)}
+.trust{text-align:center;color:var(--muted);font-size:9px;line-height:1.7;margin-top:15px}
 
-        /* نماذج الإدخال */
-        .form-group {
-            margin-bottom: 18px;
-            text-align: right;
-        }
+.sync-screen{max-width:650px;margin:45px auto;text-align:center}
+.nfc-orbit{
+  width:155px;height:155px;margin:0 auto 25px;border-radius:50%;display:grid;place-items:center;
+  background:radial-gradient(circle,#fff 0 36%,var(--rose-soft) 37% 60%,#fce1eb 61% 100%);
+  position:relative
+}
+.nfc-orbit:before,.nfc-orbit:after{content:"";position:absolute;border:1px solid #efb3c7;border-radius:50%;animation:orbit 2.3s infinite ease-out}
+.nfc-orbit:before{inset:15px}.nfc-orbit:after{inset:-4px;animation-delay:.5s}
+@keyframes orbit{0%{opacity:.8;transform:scale(.88)}100%{opacity:0;transform:scale(1.15)}}
+.phone{font-size:43px;z-index:2}
+.sync-screen h2{font-size:25px;margin-bottom:8px}.sync-screen>p{font-size:12px;color:var(--muted);line-height:1.9;max-width:540px;margin:auto}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:25px 0}
+.step{padding:14px;border:1px solid var(--line);border-radius:15px;background:#fff;text-align:right}
+.step b{display:grid;place-items:center;width:26px;height:26px;border-radius:9px;background:var(--rose-soft);color:var(--rose);font-size:11px;margin-bottom:8px}
+.step h4{font-size:10px;margin-bottom:4px}.step p{font-size:9px;color:var(--muted);line-height:1.5}
 
-        .form-group label {
-            display: block;
-            margin-bottom: 6px;
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--secondary-color);
-        }
+.disclaimer{
+  margin-top:17px;padding:12px 14px;border-radius:14px;background:#fafbfc;border:1px solid var(--line);
+  color:#81899a;font-size:9px;line-height:1.8
+}
 
-        .form-control {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #cbd5e0;
-            border-radius: 10px;
-            font-size: 14px;
-            outline: none;
-            transition: border-color 0.3s;
-        }
+.modal-backdrop{
+  position:fixed;inset:0;background:rgba(16,22,36,.45);backdrop-filter:blur(5px);
+  display:none;align-items:center;justify-content:center;padding:20px;z-index:20
+}
+.modal-backdrop.show{display:flex}
+.modal{width:min(520px,100%);background:#fff;border-radius:24px;padding:22px;box-shadow:0 25px 70px rgba(0,0,0,.22)}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.modal-head h3{font-size:17px}.close{border:0;background:#f5f6f8;width:34px;height:34px;border-radius:10px}
+.booking-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.option{border:1px solid var(--line);border-radius:13px;padding:12px;background:#fff;text-align:right}
+.option.selected{border-color:#e7a0b7;background:var(--rose-softer)}
+.option b{font-size:11px;display:block;margin-bottom:3px}.option span{font-size:9px;color:var(--muted)}
+.modal-actions{display:flex;gap:8px;margin-top:16px}.modal-actions .btn{flex:1}
 
-        .form-control:focus {
-            border-color: var(--primary-color);
-        }
+.toast{
+  position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);
+  opacity:0;background:#172033;color:#fff;padding:11px 15px;border-radius:12px;font-size:11px;
+  transition:.25s;z-index:30;pointer-events:none
+}
+.toast.show{opacity:1;transform:translateX(-50%)}
 
-        /* الأزرار */
-        .btn {
-            width: 100%;
-            padding: 13px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: background 0.3s;
-            margin-top: 10px;
-        }
-
-        .btn:hover {
-            background-color: #c23366;
-        }
-
-        .security-note {
-            font-size: 12px;
-            color: var(--gray-text);
-            margin-top: 20px;
-            text-align: center;
-            line-height: 1.5;
-        }
-
-        /* الشاشة الثانية: التوجيه والاقتران */
-        .illustration-box {
-            background-color: var(--primary-light);
-            border-radius: 50%;
-            width: 100px;
-            height: 100px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0 auto 20px auto;
-        }
-
-        .illustration-box span {
-            font-size: 42px;
-        }
-
-        .step-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--secondary-color);
-            margin-bottom: 10px;
-            text-align: center;
-        }
-
-        .step-desc {
-            font-size: 14px;
-            color: var(--gray-text);
-            margin-bottom: 25px;
-            line-height: 1.6;
-            text-align: center;
-        }
-
-        /* الشاشة الثالثة: لوحة التحكم المتقدمة */
-        .dashboard-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            text-align: right;
-        }
-
-        /* تنبيه الحالة */
-        .alert-card {
-            background: #fffaf0;
-            border: 1px solid #feebc8;
-            padding: 12px 15px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .alert-text h4 {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--warning-color);
-            margin-bottom: 2px;
-        }
-
-        .alert-text p {
-            font-size: 12px;
-            color: var(--gray-text);
-        }
-
-        /* اللوحة الحرارية والبيانات */
-        .panel-section {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 15px;
-        }
-
-        .panel-section h3 {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--secondary-color);
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* بيانات الحرارة والرباعي */
-        .thermal-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        .stat-box {
-            background: white;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #edf2f7;
-            text-align: center;
-        }
-
-        .stat-box span {
-            display: block;
-            font-size: 11px;
-            color: var(--gray-text);
-        }
-
-        .stat-box strong {
-            font-size: 15px;
-            color: var(--primary-color);
-        }
-
-        /* محاكاة اللوحة الحرارية بصرياً */
-        .heatmap-mockup {
-            background: linear-gradient(135deg, #cbd5e0 0%, #edf2f7 100%);
-            height: 90px;
-            border-radius: 8px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid #cbd5e0;
-        }
-
-        .heatmap-spot {
-            width: 35px;
-            height: 35px;
-            background: rgba(216, 67, 120, 0.6);
-            border-radius: 50%;
-            box-shadow: 0 0 12px rgba(216, 67, 120, 0.8);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(0.95); opacity: 0.8; }
-            50% { transform: scale(1.1); opacity: 1; }
-            100% { transform: scale(0.95); opacity: 0.8; }
-        }
-
-        /* الرسم البياني التتبعي */
-        .chart-mockup {
-            background: white;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #edf2f7;
-            height: 70px;
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            gap: 6px;
-        }
-
-        .chart-bar {
-            flex: 1;
-            background: var(--primary-light);
-            border-radius: 4px 4px 0 0;
-            transition: height 0.3s;
-        }
-
-        .chart-bar.active {
-            background: var(--primary-color);
-        }
-
-        .navigation-footer {
-            margin-top: 15px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn-outline {
-            background: transparent;
-            color: var(--secondary-color);
-            border: 1px solid #cbd5e0;
-        }
-
-        .btn-outline:hover {
-            background: #edf2f7;
-        }
-    </style>
+body.login-mode .topbar,
+body.login-mode .sidebar{display:none}
+body.login-mode .layout{display:block;min-height:calc(100vh - 44px)}
+body.login-mode .content{
+  min-height:calc(100vh - 44px);
+  display:grid;
+  place-items:center;
+  padding:35px 20px;
+  background:
+    radial-gradient(circle at 50% 10%,rgba(217,79,125,.07),transparent 34%),
+    linear-gradient(180deg,#fff,#fff9fb);
+}
+body.login-mode .login{margin:0 auto;width:min(500px,100%)}
+</style>
 </head>
-<body>
 
-    <div class="container">
-        <!-- الهيدر الموحد والشعار الجديد (السلوقان) -->
-        <div class="brand-header">
-            <div class="logo-icon">🎗️</div>
-            <h1>FemSense</h1>
-            <div class="brand-slogan-main">افحصي اليوم.. اطمئني غداً</div>
-            <div class="brand-slogan-sub">الاكتشاف المبكر يصنع الفرق • راقبي صحتك يوماً بيوم</div>
-        </div>
-
-        <!-- الصفحة 1: تسجيل الدخول أو إنشاء الحساب -->
-        <div id="screen-1" class="screen active">
-            <div class="form-group" style="margin-top: 10px;">
-                <label>البريد الإلكتروني أو معرف المستخدم</label>
-                <input type="text" class="form-control" placeholder="name@example.com" value="user@femsense.com">
-            </div>
-            <div class="form-group">
-                <label>كلمة المرور</label>
-                <input type="password" class="form-control" placeholder="••••••••" value="12345678">
-            </div>
-            <button class="btn" onclick="goToScreen('screen-2')">تسجيل الدخول / البدء</button>
-            <p class="security-note">🔒 بياناتكِ الصحية مشفرة بالكامل لضمان أعلى معايير الخصوصية والأمان.</p>
-        </div>
-
-        <!-- الصفحة 2: طريقة الاستخدام والاقتران السريع (NFC Tap Guide) -->
-        <div id="screen-2" class="screen">
-            <div class="illustration-box">
-                <span>📱</span>
-            </div>
-            <div class="step-title">اقتران سريع وآمن (NFC Tap)</div>
-            <div class="step-desc">قرّبي هاتفك الذكي الآن من حمالة الصدر الذكية لتفعيل التزامن الفوري وجلب أحدث القراءات اليومية بدقة عالية.</div>
-            <button class="btn" onclick="goToScreen('screen-3')">تزامن الآن وانتقل للوحة التحكم</button>
-            <div class="navigation-footer">
-                <button class="btn btn-outline" onclick="goToScreen('screen-1')">السابق</button>
-            </div>
-        </div>
-
-        <!-- الصفحة 3: لوحة التحكم الشاملة (بيانات الحرارة، اللوحة الحرارية، الرسم البياني، والتنبيه بالحالة) -->
-        <div id="screen-3" class="screen">
-            <div class="dashboard-grid">
-                
-                <!-- 1. تنبيه بالحالة -->
-                <div class="alert-card">
-                    <div class="alert-text">
-                        <h4>تنبيه استباقي مرصود</h4>
-                        <p>ارتفاع طفيف في الربع العلوي الأيسر منذ 3 أيام</p>
-                    </div>
-                    <span style="font-size: 20px;">⚠️</span>
-                </div>
-
-                <!-- 2. بيانات الحرارة الشخصية -->
-                <div class="panel-section">
-                    <h3>بيانات الحرارة اليومية <span>مقارنة بخط الأساس</span></h3>
-                    <div class="thermal-stats">
-                        <div class="stat-box">
-                            <span>القراءة الحالية</span>
-                            <strong>36.95°C</strong>
-                        </div>
-                        <div class="stat-box">
-                            <span>الانحراف المعياري</span>
-                            <strong style="color: var(--warning-color);">+0.42°C</strong>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 3. اللوحة الحرارية (Thermal Heatmap) -->
-                <div class="panel-section">
-                    <h3>الخريطة الحرارية الموزعة <span>توزيع الأرباع</span></h3>
-                    <div class="heatmap-mockup">
-                        <div class="heatmap-spot" title="الربع العلوي الأيسر"></div>
-                    </div>
-                </div>
-
-                <!-- 4. الرسم البياني التتبعي (Tracking Chart) -->
-                <div class="panel-section">
-                    <h3>الرسم البياني التتبعي <span>آخر 7 أيام</span></h3>
-                    <div class="chart-mockup">
-                        <div class="chart-bar" style="height: 40%;"></div>
-                        <div class="chart-bar" style="height: 45%;"></div>
-                        <div class="chart-bar" style="height: 42%;"></div>
-                        <div class="chart-bar" style="height: 60%;"></div>
-                        <div class="chart-bar active" style="height: 85%;"></div>
-                        <div class="chart-bar active" style="height: 80%;"></div>
-                        <div class="chart-bar active" style="height: 88%;"></div>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="navigation-footer">
-                <button class="btn btn-outline" style="width: 50%;" onclick="goToScreen('screen-2')">طريقة الاقتران</button>
-                <button class="btn" style="width: 50%; margin-top: 0;" onclick="alert('جاري تصدير التقرير الطبي المعتمد...')">تصدير التقرير</button>
-            </div>
-        </div>
-
+<body class="login-mode">
+<div class="app" id="appShell">
+  <header class="topbar">
+    <div class="brand">
+      <img class="brand-logo-img" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABdAAAAQhCAYAAAAtcq2ZAABVeWNhQlgAAFV5anVtYgAAAB5qdW1kYzJwYQARABCAAACqADibcQNjMnBhAAAAVVNqdW1iAAAAR2p1bWRjMm1hABEAEIAAAKoAOJtxA3VybjpjMnBhOjAwMWU1ZTkzLWExOTAtNDU1MC1iMGM5LTllN2EwZTk3ZDc4MgAAAAx8anVtYgAAAClqdW1kYzJhcwARABCAAACqADibcQNjMnBhLmFzc2VydGlvbnMAAAAJ0Wp1bWIAAAA7anVtZEDLDDK7ikidpwsq1vR/Q2kTYzJwYS5pY29uAAAAABhjMnNoyqpuVGMJcU4Mm7ZjR9JTTgAAABdiZmRiAGltYWdlL/N2Zyt4bWwAAAAJd2JpZGI8c3ZnIHdpZHRoPSI3MTYiIGhlaWdodD0iNzE2IiB2aWV3Qm94PSIwIDAgNzE2IDcxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTUwOC43NDkgMzE3LjM5OUM1MTلمهNzc3IDI4Ny4zMTQgNTA4Ljk5MSAyNTMuODg0IDQ4NS4zODkgMjMwLjI4MkM0NjEuNzg4IDIwNi42ODEgNDI4LjM2IDE5OC44OTSmOTguMjczIDIwNi45IzMzNzYuMjMxIDE4NC45MjggMzQzLjM5IDE3NC45NTZDMzExLjE0OCAxODMuNTk2QzI3OC45MDYgMTkyLjIzNCAyNTUuNDUgMjE3LjI5MiAyNDcuMzYgMjQ3LjM2MUMyMTcuMjkxIDI1NS40NTEgMTkyLjIzMyAyNzguOTEgMTgzLjU5NSAzMTEuMTQ5QzE3NC45NTcgMzQzLjM5MSAxODQuOTI3IDM3Ni4yMzIgMjA2LjkyNCAzOTguMjc0QzE5OC44OTYgNDI4LjM1OSAyMDYuNjgzIDQ2MS43ODkgMjMwLjI4NCA0ODUuMzkxQzI1My44ODUgNTA4Ljk5MiAyODcuMzEzIDUxNi43NzkgMzE3LjQwMSA1MDguNzVDMzM5LjQ0MiA1MzAuNzQ1IDM3Mi4yODYgNTQwLjcxNyA0MDUuMjUgNTMyLjA3OUM0MzYuNzY3IDUyMy40NDEgNDYwLjIyMyA0OTguMzg0IDQ2OC4zMTMgNDY4LjMxQzQ5OC4zODMgNDYwLjIyNCA1MjMuNDQgNDM2Ljc2NiA1MzIuMDc4IDQwNC41MjZDMjQuNzE2IDM3Mi4yODUgNTMwLjc0NyAzMzkuNDQzIDUwOC43NDkgMzE3LjQwMlYzMTcuMzk5TTQ3MC44OTkgMjQ0Ljc3NkM0ODYuODkyIDI2MC43NyA0OTMuNDg4IDI4Mi42MDEgNDkwLjY4NyAzMDMuNDEyTDQxNS41NzcgMjYwLjA0NkM0MTIuNDExIDI1OC4yMTggNDA4LjUwOSAyNTguMjE4IDQwNS4zNDUgMjYwLjA0NkwzMTcuNDAxIDMxMC44MlYyNzcuNTI2QzMxNy40MDEgMjc1LjE5MSAzMTguNjUyIDI3My4wMDUgMzIwLjY3NiAyNzEuODM3TDM4Ny42NDQgMjMzLjE3NEM0MTQuMTc4IDIxOC4zNTMgNDQ4LjM0NiAyMjIuMjIzIDQ3MC45MDEgMjQ0Ljc3Nkg0NzAsODk5Wk0zNTcuODM3IDMxMS4xNDRMMy45OC4yNzUgMzM0LjQ5MVYzODEuMTg1TDM1Ny44MzcgNDA0LjUzMkwzMTcuMzk4IDM4MS4xODVWMzM0LjQ5MUwzNTcuODM3IDMxMS4xNDRaTTI2NC43NzYgMjY5LjY5M0MyNjUuMjA3IDIzOS4zMDUgMjg1LjY0NCAyMTEuNjQ5IDMxNi40NTMgMjAzLjM5M0MzMzguMyAxOTcuNTQgMzYwLjUwNSAyMDIuNzQ0IDM3Ny4xMjcgMjE1LjU3M0wzMDIuMDE0IDI1OC45MzdDMjk4Ljg0OCAyNjAuNzY0IDI5Ni44OTggMjY0LjE0NCAyOTYuODk4IDI2Ny43OThWMzY5LjM0NkwyNjguMDY1IDM1Mi42OTlDMjY2LjA0MyAzNTEuNTMxIDI2NC43NzYgMzQ5LjM1MyAyNjQuN3c2IDM0Ny4wMTdWMjY5LjY5MVYyNjkuNjkzWk0yMDMuMzkxIDMxNi40NTRDMjA5LjI0NCAyOTQuNjA4IDIyNC44NTQgMjc3Ljk3OCAyNDQuMjc2IDI2OS45OTlWMzU2LjczQzI0NC4yNzYgMzYwLjM4NCAyNDYuMjI2IDM2My43NjMgMjQ5LjM5MiAzNjUuNTkxTDMzNy4zMzcgNDE2LjM2NUwzMDguNTAzIDQzMy4wMTNDMz.02LjQ4MSA0MzQuMTgxIDMwMy45NjEgNDM0LjE4OCAzMDEuOTM5IDQzMy4wMjJMMjM0Ljk3MSAzOTQuMzU3QzIwOC44NjggMzc4Ljc4OSAxOTUuMTM4IDM0Ny4yNjEgMjAzLjM5MSAzMTYuNDU0Wk0yNDQuNjc1IDQ3MC45QzIyOC43ODEgNDU0LjkwNiAyMjIuMTg2IDQzMy4wNzUgMjI0Ljk4NiA0MTIuMjY0TDMwMC4wOTYgNDU1LjYzQzMwMy4yNjMgNDU3LjQ1NyAzMDcuMTY0IDQ1Ny40NTcgMzEwLjMyOCA0NTUuNjNMMzk4LjI3MyA0MDQuODU2VjQzOC4xNDlDMzk4LjI3MyA0NDAuNDg1IDM5Ny4wMjIgNDQyLjY3MSAzOTQuOTk3IDQ0My44MzlMMzI4LjAyOSA0ODIuNTAyQzMwMS40OTUgNDk3LjMyMiAyNjcuMzI3IDQ5My40NTIgMjQ0Ljc3MiA0NzAuOUgyNDQuNzc1Wk00NTAuODk3IDQ0NS45ODJDMjUwLjQ2NiA0NzYuMzcxIDQzMC4wMjkgNTA0LjAyNyAzOTkuMjJMIDUxMi4yODNDMzc3LjM3MyA1MTguMTM2IDM1NS4xNjggNTEyLjkzMiAzMzguNTQ3IDUwMC4xMDJMNDEzLjY1OSA0NTYuNzM4QzQxNi44MjYgNDU0LjkxMSA0MTguNzc1IDQ1MS41MzIgNDE4Ljc3NSA0NDcuODc3VjM0Ni4zMjlMNDQ3LjYwOSAzNjIuOTc3QzQ0OS42MzEgMzY0LjE0NSA0NTAuODk3IDM2Ni4zMjMgNDUwLjg5NyAzNjguNjU5VjQ0NS45ODVWNDQ1Ljk4MlpNNTEyLjI4MiAzOTkuMjIxQzUwNi40MjkgNDIxLjA2OCA0OTAuODE5IDQzNy42OTcgNDcxLjM5NyA0NDUuNjc2VjM1OC45NDZDNDcxLjM5NyAzNTUuMjkyIDQ2OS40NDggMzUxLjkxMiA0NjYuMjgxIDM1MC4wODVMMzc4LjMzNCAyOTkuMzExTDQwNy4xNyAyODIuNjYzQzQwOS4xOTIgMjgxLjQ5NSA0MTEuNzEyIDI4MS40ODcgNDEzLjczNCAyODIuNjU1TDQ4MC43MDIgMzIxLjMxOEM1MDYuODA1IDMzNi44ODcgNTIwLjUzNiAzNjguNDE1IDUxMi4yODIgMzk5LjIyMVoiIGZpbGw9ImJsYWNrIi8+
+    </svg>
+    <div class="brand">
+      <img class="brand-logo-img" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABdAAAAQhCAYAAAAtcq2ZAABVeWNhQlgAAFV5anVtYgAAAB5qdW1kYzJwYQARABCAAACqADibcQNjMnBhAAAAVVNqdW1iAAAAR2p1bWRjMm1hABEAEIAAAKoAOJtxA3VybjpjMnBhOjAwMWU1ZTkzLWExOTAtNDU1MC1iMGM5LTllN2EwZTk3ZDc4MgAAAAx8anVtYgAAAClqdW1kYzJhcwARABCAAACqADibcQNjMnBhLmFzc2VydGlvbnMAAAAJ0Wp1bWIAAAA7anVtZEDLDDK7ikidpwsq1vR/Q2kTYzJwYS5pY29uAAAAABhjMnNoyqpuVGMJcU4Mm7ZjR9JTTgAAABdiZmRiAGltYWdlL3N2Zyt4bWwAAAAJd2JpZGI8c3ZnIHdpZHRoPSI3MTYiIGhlaWdodD0iNzE2IiB2aWV3Qm94PSIwIDAgNzE2IDcxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTUwOC43NDkgMzE3LjM5OUM1MT6Nzc3IDI4Ny4zMTQgNTA4Ljk5MSAyNTMuODg0IDQ4NS4zODkgMjMwLjI4MkM0NjEuNzg4IDIwNi42ODEgNDI4LjM2IDE5OC44OTSmOTguMjczIDIwNi45IzMzNzYuMjMxIDE4NC45MjggMzQzLjM5IDE3NC45NTZDMzExLjE0OCAxODMuNTk2QzI3OC45MDYgMTkyLjIzNCAyNTUuNDUgMjE3LjI5MiAyNDcuMzYgMjQ3LjM2MUMyMTcuMjkxIDI1NS40NTEgMTkyLjIzMyAyNzguOTEgMTgzLjU5NSAzMTEuMTQ5QzE3NC45NTcgMzQzLjM5MSAxODQuOTI3IDM3Ni4yMzIgMjA2LjkyNCAzOTguMjc0QzE5OC44OTYgNDI4LjM1OSAyMDYuNjgzIDQ2MS43ODkgMjMwLjI4NCA0ODUuMzkxQzI1My44ODUgNTA4Ljk5MiAyODcuMzEzIDUxNi43NzkgMzE3LjQwMSA1MDguNzVDMzM5LjQ0MiA1MzAuNzQ1IDM3Mi4yODYgNTQwLjcxNyA0MDUuMjUgNTMyLjA3OUM0MzYuNzY3IDUyMy40NDEgNDYwLjIyMyA0OTguMzg0IDQ2OC4zMTMgNDY4LjMxQzQ5OC4zODMgNDYwLjIyNCA1MjMuNDQgNDM2Ljc2NiA1MzIuMDc4IDQwNC41MjZDMjQuNzE2IDM3Mi4yODUgNTMwLjc0NyAzMzkuNDQzIDUwOC43NDkgMzE3LjQwMlYzMTcuMzk5TTQ3MC44OTkgMjQ0Ljc3NkM0ODYuODkyIDI2MC43NyA0OTMuNDg4IDI4Mi42MDEgNDkwLjY4NyAzMDMuNDEyTDQxNS41NzcgMjYwLjA0NkM0MTIuNDExIDI1OC4yMTggNDA4LjUwOSAyNTguMjE4IDQwNS4zNDUgMjYwLjA0NkwzMTcuNDAxIDMxMC44MlYyNzcuNTI2QzMxNy40MDEgMjc1LjE5MSAzMTguNjUyIDI3My4wMDUgMzIwLjY3NiAyNzEuODM3TDM4Ny42NDQgMjMzLjE3NEM0MTQuMTc4IDIxOC4zNTMgNDQ4LjM0NiAyMjIuMjIzIDQ3MC45MDEgMjQ0Ljc3Nkg0NzAsODk5Wk0zNTcuODM3IDMxMS4xNDRMMy45OC4yNzUgMzM0LjQ5MVYzODEuMTg1TDM1Ny44MzcgNDA0LjUzMkwzMTcuMzk4IDM4MS4xODVWMzM0LjQ5MUwzNTcuODM3IDMxMS4xNDRaTTI2NC43NzYgMjY5LjY5M0MyNjUuMjA3IDIzOS4zMDUgMjg1LjY0NCAyMTEuNjQ5IDMxNi40NTMgMjAzLjM5M0MzMzguMyAxOTcuNTQgMzYwLjUwNSAyMDIuNzQ0IDM3Ny4xMjcgMjE1LjU3M0wzMDIuMDE0IDI1OC45MzdDMjk4Ljg0OCAyNjAuNzY0IDI5Ni44OTggMjY0LjE0NCAyOTYuODk4IDI2Ny43OThWMzY5LjM0NkwyNjguMDY1IDM1Mi42OTlDMjY2LjA0MyAzNTEuNTMxIDI2NC43NzYgMzQ5LjM1MyAyNjQuN3c2IDM0Ny4wMTdWMjY5LjY5MVYyNjkuNjkzWk0yMDMuMzkxIDMxNi40NTRDMjA5LjI0NCAyOTQuNjA4IDIyNC44NTQgMjc3Ljk3OCAyNDQuMjc2IDI2OS45OTlWMzU2LjczQzI0NC4yNzYgMzYwLjM4NCAyNDYuMjI2IDM2My43NjMgMjQ5LjM5MiAzNjUuNTkxTDMzNy4zMzcgNDE2LjM2NUwzMDguNTAzIDQzMy4wMTNDMz.02LjQ4MSA0MzQuMTgxIDMwMy45NjEgNDM0LjE4OCAzMDEuOTM5IDQzMy4wMjJMMjM0Ljk3MSAzOTQuMzU3QzIwOC44NjggMzc4Ljc4OSAxOTUuMTM4IDM0Ny4yNjEgMjAzLjM5MSAzMTYuNDU0Wk0yNDQuNjc1IDQ3MC45QzIyOC43ODEgNDU0LjkwNiAyMjIuMTg2IDQzMy4wNzUgMjI0Ljk4NiA0MTIuMjY0TDMwMC4wOTYgNDU1LjYzQzMwMy4yNjMgNDU3LjQ1NyAzMDcuMTY0IDQ1Ny40NTcgMzEwLjMyOCA0NTUuNjJMMzk4LjI3MyA0MDQuODU2VjQzOC4xNDlDMzk4LjI3MyA0NDAuNDg1IDM5Ny4wMjIgNDQyLjY3MSAzOTQuOTk3IDQ0My44MzlMMzI4LjAyOSA0ODIuNTAyQzMwMS40OTUgNDk3LjMyMiAyNjcuMzI3IDQ5My40NTIgMjQ0Ljc3MiA0NzAuOUgyNDQuNzc1Wk00NTAuODk3IDQ0NS45ODJDMjUwLjQ2NiA0NzYuMzcxIDQzMC4wMjkgNTA0LjAyNyAzOTkuMjJMIDUxMi4yODNDMzc3LjM3MyA1MTguMTM2IDM1NS4xNjggNTEyLjkzMiAzMzguNTQ3IDUwMC4xMDJMNDEzLjY1OSA0NTYuNzM4QzQxNi44MjYgNDU0LjkxMSA0MTguNzc1IDQ1MS41MzIgNDE4Ljc3NSA0NDcuODc3VjM0Ni4zMjlMNDQ3LjYwOSAzNjIuOTc3QzQ0OS42MzEgMzY0LjE0NSA0NTAuODk3IDM2Ni4zMjMgNDUwLjg5NyAzNjguNjU5VjQ0NS45ODVWNDQ1Ljk4MlpNNTEyLjI4MiAzOTkuMjIxQzUwNi40MjkgNDIxLjA2OCA0OTAuODE5IDQzNy42OTcgNDcxLjM5NyA0NDUuNjc2VjM1OC45NDZDNDcxLjM5NyAzNTUuMjkyIDQ2OS40NDggMzUxLjkxMiA0NjYuMjgxIDM1MC4wODVMMzc4LjMzNCAyOTkuMzExTDQwNy4xNyAyODIuNjYzQzQwOS4xOTIgMjgxLjQ5NSA0MTEuNzEyIDI4MS40ODcgNDEzLjczNCAyODIuNjU1TDQ4MC43MDIgMzIxLjMxOEM1MDYuODA1IDMzNi44ODcgNTIwLjUzkiyeDgrNDE1IDUxMi4yODIgMzk5LjIyMVoiIGZpbGw9ImJsYWNrIi8+
+    </svg>
+      <div><h1>FemSense</h1><p>مراقبة يومية لصحة الثدي</p></div>
     </div>
+    <div class="top-actions">
+      <button class="icon-btn" onclick="toast('الإشعارات محدثة')">🔔</button>
+      <div class="profile"><span class="avatar">ف</span><span>فاطمة</span>⌄</div>
+    </div>
+  </header>
 
-    <!-- كود التنقل التفاعلي بين الـ 3 صفحات -->
-    <script>
-        function goToScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(screen => {
-                screen.classList.remove('active');
-            });
-            document.getElementById(screenId).classList.add('active');
-        }
-    </script>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="side-label">مساحتي الصحية</div>
+      <button class="nav-btn active" data-target="dashboard" onclick="show('dashboard',this)"><span class="nav-icon">⌂</span>لوحة المتابعة</button>
+      <button class="nav-btn" data-target="sync" onclick="show('sync',this)"><span class="nav-icon">⌁</span>مزامنة NFC</button>
+      <button class="nav-btn" onclick="openBooking()"><span class="nav-icon">◫</span>موعد الطبيبة</button>
+      <button class="nav-btn" onclick="exportReport()"><span class="nav-icon">↧</span>التقرير الصحي</button>
+      <div class="side-note">
+        <strong>خصوصيتك أولاً</strong>
+        <p>البيانات المعروضة في هذا البروتوتايب تجريبية، وليست تشخيصاً طبياً.</p>
+      </div>
+    </aside>
+
+    <main class="content">
+      <!-- LOGIN -->
+      <section id="login" class="screen active">
+        <div class="login">
+          <div class="brand-big">
+            <img class="login-logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABdAAAAQhCAYAAAAtcq2ZAABVeWNhQlgAAFV5anVtYgAAAB5qdW1kYzJwYQARABCAAACqADibcQNjMnBhAAAAVVNqdW1iAAAAR2p1bWRjMm1hABEAEIAAAKoAOJtxA3VybjpjMnBhOjAwMWU1ZTkzLWExOTAtNDU1MC1iMGM5LTllN2EwZTk3ZDc4MgAAAAx8anVtYgAAAClqdW1kYzJhcwARABCAAACqADibcQNjMnBhLmFzc2VydGlvbnMAAAAJ0Wp1bWIAAAA7anVtZEDLDDK7ikidpwsq1vR/Q2kTYzJwYS5pY29uAAAAABhjMnNoyqpuVGMJcU4Mm7ZjR9JTTgAAABdiZmRiAGltYWdlL3N2Zyt4bWwAAAAJd2JpZGI8c3ZnIHdpZHRoPSI3MTYiIGhlaWdodD0iNzE2IiB2aWV3Qm94PSIwIDAgNzE2IDcxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTUwOC43NDkgMzE3LjM5OUM1MTYuNzc3IDI4Ny4zMTQgNTA4Ljk5MSAyNTMuODg0IDQ4NS4zODkgMjMwLjI4MkM0NjEuNzg4IDIwNi42ODEgNDI4LjM2IDE5OC44OTVJMzk4LjI3MyAyMDYuOTIzQzM3Ni4yMzEgMTg0LjkyOCAzNDMuMzkgMTc0Ljk1NiAzMTEuMTQ4IDE4My41OTZDMjc4LjkwNIHjOTIuMjM0IDI1NS40NSAyMTcuMjkyIDI0Ny4zNiAyNDcuMzYxQzIxNy4yOTEgMjU1LjQ1MSAxOTIuMjMzIDI3OC45MSAxODMuNTk1IDMxMS4xNDlDMTc0Ljk1NyAzNDMuMzkxIDE4NC45MjcgMzc2LjIzMiAyMDYuOTI0IDM5OC4yNzRDMTk4Ljg5NiA0MjguMzU5IDIwNi42ODMgNDYxLjc4OSAyMzAuMjg0IDQ4NS4zOTFDMjUzLjg4NSA1MDguOTkyIDI4Ny4zMTMgNTE2Ljc3OSAzMTcuNDAxIDUwOC43NUMzMzkuNDQyIDUzMC43NDUgMzcyLjI4NEg0MDQuNTI1IDUzMi4wNzlDNDM2Ljc2NyA1MjMuNDQxIDQ2MC4yMjMgNDk4LjM4NCA0NjguMzEzIDQ2OC4zMTVDNDk4LjM4MyA0NjAuMjI0IDUyMy40NCA0MzYuNzY2IDUzMi4wNzggNDA0LjUyNidDNTQwLjcxNiAzNzIuMjg1IDUzMC43NDcgMzM5LjQ0MyA1MDguNzQ5IDMxNy40MDJWMzE3LjM5OU00NzAuODk5IDI0NC43NzZDNDg2Ljg5MiAyNjAuNzcgNDkzLjQ4OCAyODIuNjAxIDQ5MC42ODcgMzAzLjQxMkw0MTUuNTc3IDI2MC4wNDZDMQEyLjQxMSAyNTguMjE4IDQwOC41MDkgMjU4LjIxOCA0MDUuMzQ1IDI2MC4wNDZMMzE3LjQwMSAzMTAuODJWMjc3LjUyNkwzMTcuNDAxIDI3NS4xOTEgMzE4LjY1MiAyNzMuMDA1IDMyMC42NzYgMjcxLjgzN0wzODcuNjQ0IDIzMy4xNzRDNDE0LjE3OCAyMTguMzUzIDQ0OC4zNDYgMjIyLjIyMyA0NzAuOTAxIDI0NC43NzZINDcwLjg5OVpNMzU3LjgzNyAzMTEuMTQ0TDM5OC4yNzUgMzM0LjQ5MVYzODEuMTg1TDM1Ny44MzcgNDA0LjUzMkwzMTcuMzk4IDM4MS4xODVWMzM0LjQ5MUwzNTcuODM3IDMxMS4xNDRaTTI2NC43NzYgMjY5LjY5M0MyNjUuMjA3IDIzOS4zMDUgMjg1LjY0NCAyMTEuNjQ5IDMxNi40NTMgMjAzLjM5M0MzMzguMyAxOTcuNTQgMzYwLjUwNSAyMDIuNzQ0IDM3Ny4xMjcgMjE1LjU3M0wzMDIuMDE0IDI1OC45MzdDMjk4Ljg0OCAyNjAuNzY0IDI5Ni44OTggMjY0LjE0NCAyOTYuODk4IDI2Ny43OThWMzY5LjM0NkwyNjguMDY1IDM1Mi42OTlDMjY2LjA0MyAzNTEuNTMxIDI2NC43NzYgMzQ5LjM1MyAyNjQuN3c2IDM0Ny4wMTdWMjY5LjY5MVYyNjkuNjkzWk0yMDMuMzkxIDMxNi40NTRDMjA5LjI0NCAyOTQuNjA4IDIyNC44NTQgMjc3Ljk3OCAyNDQuMjc2IDI2OS45OTlWMzU2LjczQzI0NC4yNzYgMzYwLjM4NCAyNDYuMjI2IDM2My43NjMgMjQ5LjM5MiAzNjUuNTkxTDMzNy4zMzcgNDE2LjM2NUwzMDguNTAzIDQzMy4wMTNDMzAzLjQ4MSA0MzQuMTgxIDMwMy45NjEgNDM0LjE4OCAzMDEuOTM5IDQzMy4wMjJMMjM0Ljk3MSAzOTQuMzU3QzIwOC44NjggMzc4Ljc4OSAxOTUuMTM4IDM0Ny4yNjEgMjAzLjM5MSAzMTYuNDU0Wk0yNDQuNjc1IDQ3MC45QzIyOC43ODEgNDU0LjkwNiAyMjIuMTg2IDQzMy4wNzUgMjI0Ljk4NiA0MTIuMjY0TDMwMC4wOTYgNDU1LjYzQzMwMy4yNjMgNDU3LjQ1NyAzMDcuMTY0IDQ1Ny40NTcgMzEwLjMyOCA0NTUuNjNMMzk4LjI3MyA0MDQuODU2VjQzOC4xNDlDMzk4LjI3MyA0NDAuNDg1IDM5Ny4wMjIgNDQyLjY3MSAzOTQuOTk3IDQ0My44MzlMMzI4LjAyOSA0ODIuNTAyQzMwMS40OTUgNDk3LjMyMiAyNjcuMzI3IDQ5My40NTIgMjQ0Ljc3MiA0NzAuOUgyNDQuNzc1Wk00NTAuODk3IDQ0NS45ODJDMjUwLjQ2NiA0NzYuMzcxIDQzMC4wMjkgNTA0LjAyNyAzOTkuMjJMIDUxMi4yODNDMzc3LjM3MyA1MTguMTM2IDM1NS4xNjggNTEyLjkzMiAzMzguNTQ3IDUwMC4xMDJMNDEzLjY1OSA0NTYuNzM4QzQxNi44MjYgNDU0LjkxMSA0MTguNzc1IDQ1MS41MzIgNDE4Ljc3NSA0NDcuODc3VjM0Ni4zMjlMNDQ3LjYwOSAzNjIuOTc3QzQ0OS42MzEgMzY0LjE0NSA0NTAuODk3IDM2Ni4zMjMgNDUwLjg5NyAzNjguNjU5VjQ0NS45ODVWNDQ1Ljk4MlpNNTEyLjI4MiAzOTkuMjIxQzUwNi40MjkgNDIxLjA2OCA0OTAuODE5IDQzNy42OTcgNDcxLjM5NyA0NDUuNjc2VjM1OC45NDZDNDcxLjM5NyAzNTUuMjkyIDQ2OS40NDggMzUxLjkxMiA0NjYuMjgxIDM1MC4wODVMMzc4LjMzNCAyOTkuMzExTDQwNy4xNyAyODIuNjYzQzQwOS4xOTIgMjgxLjQ5NSA0MTEuNzEyIDI4MS40ODcgNDEzLjczNCAyODIuNjU1TDQ4MC43MDIgMzIxLjMxOEM1MDYuODA1IDMzNi44ODcgNTIwLjUzMzAzNjg0MTUgNTEyLjI4MiAzOTkuIyJpIGZpbGw9ImJsYWNrIi8+
+    </svg>
+          </div>
+          <h2>مرحباً بكِ في FemSense</h2>
+          <p class="login-sub">مساعدك الذكي للعناية بصحة الثدي والمتابعة الوقائية اليومية.</p>
+          <div class="form">
+            <div class="field">
+              <label>رقم الهوية أو البريد الإلكتروني</label>
+              <input type="text" placeholder="name@example.com" value="fatima@femsense.sa">
+            </div>
+            <div class="field">
+              <label>كلمة المرور</label>
+              <input type="password" placeholder="••••••••" value="••••••••">
+            </div>
+            <button class="btn full" onclick="handleLogin()">دخول لوحة المتابعة</button>
+            <p class="trust">بياناتك الطبية مشفرة ومحمية وفق أعلى معايير الخصوصية الصحية.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- DASHBOARD -->
+      <section id="dashboard" class="screen">
+        <div class="hero">
+          <div>
+            <div class="eyebrow">لوحة المتابعة الوقائية</div>
+            <h2>أهلاً بكِ، فاطمة 👋</h2>
+            <p>حالة الاستشعار مستقرة. آخر مزامنة عبر مستشعر NFC كانت اليوم الساعة 08:30 صباحاً.</p>
+          </div>
+          <div class="sync-pill"><span class="dot"></span>الحساس متصل وجاهز</div>
+        </div>
+
+        <div class="grid grid-4" style="margin-bottom:14px">
+          <div class="card metric">
+            <div class="metric-label">درجة الحرارة الموضعية</div>
+            <div class="metric-value">36.4 <small>°C</small></div>
+            <div class="metric-sub">ضمن المعدل الطبيعي الآمن</div>
+          </div>
+          <div class="card metric">
+            <div class="metric-label">المقاومة الحيوية (Bioimpedance)</div>
+            <div class="metric-value">142 <small>Ω</small></div>
+            <div class="metric-sub">استقرار أنسجة ممتاز</div>
+          </div>
+          <div class="card metric">
+            <div class="metric-label">كفاءة الحصاد الطاقي NFC</div>
+            <div class="metric-value">98 <small>%</small></div>
+            <div class="metric-sub">شحن كامل بالنبضة</div>
+          </div>
+          <div class="card metric">
+            <div class="metric-label">مؤشر التحليل الذكي (AI)</div>
+            <div class="metric-value">0% <small>خطر</small></div>
+            <div class="metric-sub">لا توجد مؤشرات غير طبيعية</div>
+          </div>
+        </div>
+
+        <div class="grid grid-3">
+          <div class="card" style="grid-column: span 2">
+            <div class="card-title">
+              <h3>خريطة الاستشعار الحراري الحية</h3>
+              <span>توزيع المستشعرات الموزعة بدقة</span>
+            </div>
+            <div class="breast-wrap">
+              <div class="chest">
+                <div class="breast left">
+                  <div class="nipple"></div>
+                  <div class="quadrant q1"></div><div class="quadrant q2"></div>
+                  <div class="quadrant q3"></div><div class="quadrant q4"></div>
+                </div>
+                <div class="breast right">
+                  <div class="nipple"></div>
+                  <div class="quadrant q1"></div><div class="quadrant q2"></div>
+                  <div class="quadrant q3"></div><div class="quadrant q4"></div>
+                  <div class="hotspot" title="منطقة متابعة روتينية"></div>
+                </div>
+              </div>
+              <div class="map-legend">
+                <span><i class="legend-dot"></i> قراءة طبيعية مستقرة</span>
+                <span><i class="legend-dot gray"></i> محيط المستشعر</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">
+              <h3>توصيات الذكاء الاصطناعي</h3>
+              <span>محدثة اليوم</span>
+            </div>
+            <div class="alert good" style="margin-bottom:10px">
+              <div class="alert-main">
+                <div class="alert-icon">💡</div>
+                <div>
+                  <h3>موعد الفحص الذاتي القادم</h3>
+                  <p>ينصح بإجراء الفحص اليدوي بعد 4 أيام لتناسب التغير الهرموني.</p>
+                </div>
+              </div>
+            </div>
+            <div class="sensor-row" style="margin-bottom:10px">
+              <div class="sensor">
+                <div class="sensor-icon">⚡</div>
+                <h4>طاقة البطارية</h4>
+                <p>لا تتطلب بطارية</p>
+                <strong>NFC Active</strong>
+              </div>
+              <div class="sensor">
+                <div class="sensor-icon">🛡️</div>
+                <h4>الحماية والأمان</h4>
+                <p>تشفير تام للبيانات</p>
+                <strong>AES-256</strong>
+              </div>
+            </div>
+            <button class="btn full ghost" onclick="toast('تم تحديث التوصيات بنجاح')">تحديث قراءات الحساسات</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SYNC -->
+      <section id="sync" class="screen">
+        <div class="sync-screen">
+          <div class="nfc-orbit">
+            <div class="phone">📱</div>
+          </div>
+          <h2>تقريب الجوال للمزامنة الفورية عبر NFC</h2>
+          <p>قربي هاتفك الذكي من قطعة FemSense الذكية لقراءة آخر مستجدات الحساسات الحرارية وحالة المؤشرات الحيوية دون الحاجة لشاحن أو أسلاك.</p>
+          
+          <div class="steps">
+            <div class="step">
+              <b>1</b>
+              <h4>تفعيل خاصية NFC</h4>
+              <p>تأكد من فتح الاتصال قريب المدى بجوالك.</p>
+            </div>
+            <div class="step">
+              <b>2</b>
+              <h4>التقريب المباشر</h4>
+              <p>مرري الهاتف جوار قطعة القماش الذكية لسنتيمترات معدودة.</p>
+            </div>
+            <div class="step">
+              <b>3</b>
+              <h4>اكتمال المزامنة</h4>
+              <p>ستظهر البيانات الحيوية فوراً هنا على التطبيق.</p>
+            </div>
+          </div>
+
+          <button class="btn" onclick="toast('جاري البحث عن المستشعر... تم الاتصال بنجاح!')">بدء المزامنة الآن</button>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- BOOKING MODAL -->
+<div class="modal-backdrop" id="bookingModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>حجز موعد استشارة مع الطبيبة المختصة</h3>
+      <button class="close" onclick="closeBooking()">✕</button>
+    </div>
+    <p style="font-size:11px;color:var(--muted);margin-bottom:14px">اختاري العيادة والوقت المناسب لمتابعة تقريرك الصحي الوقائي:</p>
+    <div class="booking-grid">
+      <div class="option selected" onclick="selectOpt(this)">
+        <b>استشارة صحية افتراضية (عن بُعد)</b>
+        <span>متاحة خلال 24 ساعة القادمة</span>
+      </div>
+      <div class="option" onclick="selectOpt(this)">
+        <b>زيارة عيادة الفحص الوقائي المبكر</b>
+        <span>مستشفى الملك فهد التخصصي</span>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn secondary" onclick="closeBooking()">إلغاء</button>
+      <button class="btn" onclick="confirmBooking()">تأكيد حجز الموعد</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toastBox">تم بنجاح</div>
+
+<script>
+function show(targetId, btn){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(targetId).classList.add('active');
+  document.querySelectorAll('.sidebar .nav-btn').forEach(b => b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
+
+function handleLogin(){
+  document.body.classList.remove('login-mode');
+  show('dashboard', document.querySelector('.nav-btn'));
+  toast('مرحباً بكِ مجدداً، تم تسجيل الدخول بنجاح');
+}
+
+function openBooking(){
+  document.getElementById('bookingModal').classList.add('show');
+}
+function closeBooking(){
+  document.getElementById('bookingModal').classList.remove('show');
+}
+function selectOpt(el){
+  document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function confirmBooking(){
+  closeBooking();
+  toast('تم تأكيد حجز الموعد وإرسال التفاصيل لبريدك الإلكتروني');
+}
+
+function exportReport(){
+  toast('جاري تجهيز وتصدير التقرير الطبي بصيغة PDF...');
+}
+
+function toast(msg){
+  const t = document.getElementById('toastBox');
+  t.innerText = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+</script>
 </body>
 </html>
