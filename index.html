@@ -3,19 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FemSense - المتابعة الصحية الذكية</title>
+    <title>FemSense - افحصي اليوم.. اطمئني غداً</title>
     <!-- استيراد الخطوط والهوية البصرية -->
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-color: #d84378;
             --primary-light: #fce4ec;
             --secondary-color: #2c3e50;
-            --bg-color: #f9fbfd;
+            --bg-color: #f4f7f6;
             --card-bg: #ffffff;
-            --text-color: #333333;
-            --gray-text: #666666;
-            --border-radius: 12px;
+            --text-color: #2d3748;
+            --gray-text: #718096;
+            --border-radius: 16px;
+            --success-color: #38a169;
+            --warning-color: #dd6b20;
         }
 
         * {
@@ -32,37 +34,63 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            padding: 20px;
         }
 
         .container {
             width: 100%;
-            max-width: 420px;
+            max-width: 480px;
             background: var(--card-bg);
             padding: 30px;
             border-radius: var(--border-radius);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+            position: relative;
+        }
+
+        /* الهيدر الموحد والشعار الجديد */
+        .brand-header {
             text-align: center;
-        }
-
-        /* الشعار */
-        .logo-area {
             margin-bottom: 25px;
+            border-bottom: 1px solid #edf2f7;
+            padding-bottom: 15px;
         }
 
-        .logo-area h1 {
+        /* أيقونة الشعار الرسمية المستوحاة من الصورة */
+        .logo-icon {
+            width: 55px;
+            height: 55px;
+            margin: 0 auto 8px auto;
+            background-color: var(--primary-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: var(--primary-color);
-            font-size: 26px;
-            font-weight: 700;
+            font-size: 24px;
+        }
+
+        .brand-header h1 {
+            color: #1a202c;
+            font-size: 28px;
+            font-weight: 800;
             letter-spacing: 0.5px;
         }
 
-        .logo-area p {
-            color: var(--gray-text);
-            font-size: 13px;
-            margin-top: 5px;
+        .brand-slogan-main {
+            color: var(--primary-color);
+            font-size: 15px;
+            font-weight: 700;
+            margin-top: 6px;
         }
 
-        /* إدارة الشاشات (تبديل المراحل) */
+        .brand-slogan-sub {
+            color: var(--gray-text);
+            font-size: 11px;
+            margin-top: 2px;
+            font-weight: 500;
+        }
+
+        /* إدارة الشاشات (تبديل المراحل الـ 3) */
         .screen {
             display: none;
         }
@@ -73,7 +101,7 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
+            from { opacity: 0; transform: translateY(6px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -87,15 +115,15 @@
             display: block;
             margin-bottom: 6px;
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 700;
             color: var(--secondary-color);
         }
 
         .form-control {
             width: 100%;
             padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+            border: 1px solid #cbd5e0;
+            border-radius: 10px;
             font-size: 14px;
             outline: none;
             transition: border-color 0.3s;
@@ -108,13 +136,13 @@
         /* الأزرار */
         .btn {
             width: 100%;
-            padding: 12px;
+            padding: 13px;
             background-color: var(--primary-color);
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 15px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             transition: background 0.3s;
             margin-top: 10px;
@@ -124,31 +152,20 @@
             background-color: #c23366;
         }
 
-        .btn-secondary {
-            background-color: transparent;
-            color: var(--primary-color);
-            border: 1px solid var(--primary-color);
-            margin-top: 10px;
-        }
-
-        .btn-secondary:hover {
-            background-color: var(--primary-light);
-        }
-
-        /* رسائل الأمان والتوضيح */
         .security-note {
             font-size: 12px;
             color: var(--gray-text);
             margin-top: 20px;
+            text-align: center;
             line-height: 1.5;
         }
 
-        /* رسوم وأيقونات الإرشادات */
+        /* الشاشة الثانية: التوجيه والاقتران */
         .illustration-box {
             background-color: var(--primary-light);
             border-radius: 50%;
-            width: 90px;
-            height: 90px;
+            width: 100px;
+            height: 100px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -156,7 +173,7 @@
         }
 
         .illustration-box span {
-            font-size: 38px;
+            font-size: 42px;
         }
 
         .step-title {
@@ -164,6 +181,7 @@
             font-weight: 700;
             color: var(--secondary-color);
             margin-bottom: 10px;
+            text-align: center;
         }
 
         .step-desc {
@@ -171,101 +189,253 @@
             color: var(--gray-text);
             margin-bottom: 25px;
             line-height: 1.6;
+            text-align: center;
         }
 
-        /* لوحة التحكم وخط الأساس */
-        .status-card {
-            background: #e8f5e9;
-            border: 1px solid #c8e6c9;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+        /* الشاشة الثالثة: لوحة التحكم المتقدمة */
+        .dashboard-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
             text-align: right;
         }
 
-        .status-card h4 {
-            color: #2e7d32;
-            font-size: 15px;
-            margin-bottom: 4px;
+        /* تنبيه الحالة */
+        .alert-card {
+            background: #fffaf0;
+            border: 1px solid #feebc8;
+            padding: 12px 15px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        .status-card p {
-            color: #388e3c;
-            font-size: 13px;
+        .alert-text h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--warning-color);
+            margin-bottom: 2px;
+        }
+
+        .alert-text p {
+            font-size: 12px;
+            color: var(--gray-text);
+        }
+
+        /* اللوحة الحرارية والبيانات */
+        .panel-section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 15px;
+        }
+
+        .panel-section h3 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* بيانات الحرارة والرباعي */
+        .thermal-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .stat-box {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #edf2f7;
+            text-align: center;
+        }
+
+        .stat-box span {
+            display: block;
+            font-size: 11px;
+            color: var(--gray-text);
+        }
+
+        .stat-box strong {
+            font-size: 15px;
+            color: var(--primary-color);
+        }
+
+        /* محاكاة اللوحة الحرارية بصرياً */
+        .heatmap-mockup {
+            background: linear-gradient(135deg, #cbd5e0 0%, #edf2f7 100%);
+            height: 90px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #cbd5e0;
+        }
+
+        .heatmap-spot {
+            width: 35px;
+            height: 35px;
+            background: rgba(216, 67, 120, 0.6);
+            border-radius: 50%;
+            box-shadow: 0 0 12px rgba(216, 67, 120, 0.8);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+
+        /* الرسم البياني التتبعي */
+        .chart-mockup {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #edf2f7;
+            height: 70px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 6px;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: var(--primary-light);
+            border-radius: 4px 4px 0 0;
+            transition: height 0.3s;
+        }
+
+        .chart-bar.active {
+            background: var(--primary-color);
+        }
+
+        .navigation-footer {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--secondary-color);
+            border: 1px solid #cbd5e0;
+        }
+
+        .btn-outline:hover {
+            background: #edf2f7;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- الهيدر الموحد: شعار الموقع -->
-        <div class="logo-area">
+        <!-- الهيدر الموحد والشعار الجديد (السلوقان) -->
+        <div class="brand-header">
+            <div class="logo-icon">🎗️</div>
             <h1>FemSense</h1>
-            <p>منظومة المتابعة الصحية الذكية والوقائية</p>
+            <div class="brand-slogan-main">افحصي اليوم.. اطمئني غداً</div>
+            <div class="brand-slogan-sub">الاكتشاف المبكر يصنع الفرق • راقبي صحتك يوماً بيوم</div>
         </div>
 
-        <!-- الشاشة 1: تسجيل الدخول أو إنشاء الحساب -->
+        <!-- الصفحة 1: تسجيل الدخول أو إنشاء الحساب -->
         <div id="screen-1" class="screen active">
-            <div class="form-group">
+            <div class="form-group" style="margin-top: 10px;">
                 <label>البريد الإلكتروني أو معرف المستخدم</label>
-                <input type="text" class="form-control" placeholder="name@example.com">
+                <input type="text" class="form-control" placeholder="name@example.com" value="user@femsense.com">
             </div>
             <div class="form-group">
                 <label>كلمة المرور</label>
-                <input type="password" class="form-control" placeholder="••••••••">
+                <input type="password" class="form-control" placeholder="••••••••" value="12345678">
             </div>
-            <button class="btn" onclick="goToScreen('screen-2')">تسجيل الدخول / بدء المتابعة</button>
+            <button class="btn" onclick="goToScreen('screen-2')">تسجيل الدخول / البدء</button>
             <p class="security-note">🔒 بياناتكِ الصحية مشفرة بالكامل لضمان أعلى معايير الخصوصية والأمان.</p>
         </div>
 
-        <!-- الشاشة 2: طريقة الاستخدام والاقتران السريع (NFC Tap) -->
+        <!-- الصفحة 2: طريقة الاستخدام والاقتران السريع (NFC Tap Guide) -->
         <div id="screen-2" class="screen">
             <div class="illustration-box">
                 <span>📱</span>
             </div>
-            <div class="step-title">اقتران سريع وآمن</div>
-            <div class="step-desc">قرّبي هاتفك الذكي الآن لتفعيل التزامن ونقل قراءاتك اليومية بسلاسة.</div>
-            <button class="btn" onclick="goToScreen('screen-3')">قرّبي هاتفكِ الآن للتزامن (NFC Tap)</button>
-            <button class="btn btn-secondary" onclick="goToScreen('screen-3')">تخطي مؤقتاً لوحة التحكم</button>
+            <div class="step-title">اقتران سريع وآمن (NFC Tap)</div>
+            <div class="step-desc">قرّبي هاتفك الذكي الآن من حمالة الصدر الذكية لتفعيل التزامن الفوري وجلب أحدث القراءات اليومية بدقة عالية.</div>
+            <button class="btn" onclick="goToScreen('screen-3')">تزامن الآن وانتقل للوحة التحكم</button>
+            <div class="navigation-footer">
+                <button class="btn btn-outline" onclick="goToScreen('screen-1')">السابق</button>
+            </div>
         </div>
 
-        <!-- الشاشة 3: لوحة التحكم اليومية وبصمة خط الأساس -->
+        <!-- الصفحة 3: لوحة التحكم الشاملة (بيانات الحرارة، اللوحة الحرارية، الرسم البياني، والتنبيه بالحالة) -->
         <div id="screen-3" class="screen">
-            <div class="status-card">
-                <h4>الحالة العامة: مستقرة</h4>
-                <p>طبيعي - خط الأساس الشخصي ضمن النطاق الآمن.</p>
-            </div>
-            <div class="step-desc" style="text-align: right; margin-bottom: 15px;">
-                <strong>توزيع الأرباع:</strong> جميع القراءات الحرارية والبيوأهدية متزنة اليوم.
-            </div>
-            <button class="btn" onclick="goToScreen('screen-4')">عرض التقرير الإكلينيكي</button>
-        </div>
+            <div class="dashboard-grid">
+                
+                <!-- 1. تنبيه بالحالة -->
+                <div class="alert-card">
+                    <div class="alert-text">
+                        <h4>تنبيه استباقي مرصود</h4>
+                        <p>ارتفاع طفيف في الربع العلوي الأيسر منذ 3 أيام</p>
+                    </div>
+                    <span style="font-size: 20px;">⚠️</span>
+                </div>
 
-        <!-- الشاشة 4: التنبيه المستهدف والإنذار المبكر (محاكاة لحالة تتطلب مراجعة) -->
-        <div id="screen-4" class="screen">
-            <div style="background: #fff3e0; border: 1px solid #ffe0b2; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: right;">
-                <h4 style="color: #ef6c00; font-size: 15px; margin-bottom: 4px;">تنبيه استباقي</h4>
-                <p style="color: #f57c00; font-size: 13px;">تم رصد تغير مستمر في [الربع العلوي الأيسر] لأكثر من 3 أيام.</p>
-            </div>
-            <button class="btn" onclick="goToScreen('screen-5')">مراجعة التقرير الإكلينيكي</button>
-            <button class="btn btn-secondary" onclick="alert('تم إرسال الملاحظات بنجاح')">مشاركة الأعراض الظاهرة</button>
-        </div>
+                <!-- 2. بيانات الحرارة الشخصية -->
+                <div class="panel-section">
+                    <h3>بيانات الحرارة اليومية <span>مقارنة بخط الأساس</span></h3>
+                    <div class="thermal-stats">
+                        <div class="stat-box">
+                            <span>القراءة الحالية</span>
+                            <strong>36.95°C</strong>
+                        </div>
+                        <div class="stat-box">
+                            <span>الانحراف المعياري</span>
+                            <strong style="color: var(--warning-color);">+0.42°C</strong>
+                        </div>
+                    </div>
+                </div>
 
-        <!-- الشاشة 5: التقرير الطبي الرسمي -->
-        <div id="screen-5" class="screen">
-            <div class="step-title" style="font-size: 16px;">التقرير الطبي الموثق</div>
-            <div class="step-desc" style="text-align: right; font-size: 13px; margin-bottom: 15px;">
-                • المؤشر الحراري: +0.42°C عن خط الأساس.<br>
-                • فترة التغير: مستمر لـ 3 أيام.<br>
-                • الحالة: موصى بمشاركتها مع الطبيبة المختصة.
+                <!-- 3. اللوحة الحرارية (Thermal Heatmap) -->
+                <div class="panel-section">
+                    <h3>الخريطة الحرارية الموزعة <span>توزيع الأرباع</span></h3>
+                    <div class="heatmap-mockup">
+                        <div class="heatmap-spot" title="الربع العلوي الأيسر"></div>
+                    </div>
+                </div>
+
+                <!-- 4. الرسم البياني التتبعي (Tracking Chart) -->
+                <div class="panel-section">
+                    <h3>الرسم البياني التتبعي <span>آخر 7 أيام</span></h3>
+                    <div class="chart-mockup">
+                        <div class="chart-bar" style="height: 40%;"></div>
+                        <div class="chart-bar" style="height: 45%;"></div>
+                        <div class="chart-bar" style="height: 42%;"></div>
+                        <div class="chart-bar" style="height: 60%;"></div>
+                        <div class="chart-bar active" style="height: 85%;"></div>
+                        <div class="chart-bar active" style="height: 80%;"></div>
+                        <div class="chart-bar active" style="height: 88%;"></div>
+                    </div>
+                </div>
+
             </div>
-            <button class="btn" onclick="alert('جاري تصدير التقرير بصيغة PDF...')">تصدير ومشاركة التقرير (PDF)</button>
-            <button class="btn btn-secondary" onclick="goToScreen('screen-1')">العودة للرئيسية</button>
+
+            <div class="navigation-footer">
+                <button class="btn btn-outline" style="width: 50%;" onclick="goToScreen('screen-2')">طريقة الاقتران</button>
+                <button class="btn" style="width: 50%; margin-top: 0;" onclick="alert('جاري تصدير التقرير الطبي المعتمد...')">تصدير التقرير</button>
+            </div>
         </div>
 
     </div>
 
-    <!-- سكربت بسيط للتنقل بين الشاشات لتجربة المستخدم (Prototype) -->
+    <!-- كود التنقل التفاعلي بين الـ 3 صفحات -->
     <script>
         function goToScreen(screenId) {
             document.querySelectorAll('.screen').forEach(screen => {
