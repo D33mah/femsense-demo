@@ -3,216 +3,275 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FemSense - نظام مراقبة صحة الثدي الذكي</title>
-    <!-- Tailwind CSS للتصميم السريع والاحترافي -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            light: '#fdf2f4',
-                            DEFAULT: '#be185d', // وردي غامق راقي (Pink 700)
-                            dark: '#831843',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <title>FemSense - المتابعة الصحية الذكية</title>
+    <!-- استيراد الخطوط والهوية البصرية -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Tajawal', sans-serif; }
+        :root {
+            --primary-color: #d84378;
+            --primary-light: #fce4ec;
+            --secondary-color: #2c3e50;
+            --bg-color: #f9fbfd;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --gray-text: #666666;
+            --border-radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 420px;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        /* الشعار */
+        .logo-area {
+            margin-bottom: 25px;
+        }
+
+        .logo-area h1 {
+            color: var(--primary-color);
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .logo-area p {
+            color: var(--gray-text);
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        /* إدارة الشاشات (تبديل المراحل) */
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* نماذج الإدخال */
+        .form-group {
+            margin-bottom: 18px;
+            text-align: right;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--secondary-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+        }
+
+        /* الأزرار */
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background-color: #c23366;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            margin-top: 10px;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--primary-light);
+        }
+
+        /* رسائل الأمان والتوضيح */
+        .security-note {
+            font-size: 12px;
+            color: var(--gray-text);
+            margin-top: 20px;
+            line-height: 1.5;
+        }
+
+        /* رسوم وأيقونات الإرشادات */
+        .illustration-box {
+            background-color: var(--primary-light);
+            border-radius: 50%;
+            width: 90px;
+            height: 90px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 20px auto;
+        }
+
+        .illustration-box span {
+            font-size: 38px;
+        }
+
+        .step-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+        }
+
+        .step-desc {
+            font-size: 14px;
+            color: var(--gray-text);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        /* لوحة التحكم وخط الأساس */
+        .status-card {
+            background: #e8f5e9;
+            border: 1px solid #c8e6c9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        .status-card h4 {
+            color: #2e7d32;
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .status-card p {
+            color: #388e3c;
+            font-size: 13px;
+        }
     </style>
 </head>
-<body class="bg-brand-light min-h-screen text-gray-800">
+<body>
 
-    <!-- Header -->
-    <header class="bg-white shadow-sm border-b border-pink-100 py-4 px-6 mb-8">
-        <div class="max-w-5xl mx-auto flex justify-between items-center">
-            <div class="flex items-center space-x-3 space-x-reverse">
-                <div class="bg-brand text-white p-2 rounded-xl font-bold text-xl shadow-md">FS</div>
-                <div>
-                    <h1 class="text-2xl font-bold text-brand-dark">FemSense</h1>
-                    <p class="text-xs text-gray-500">حمالة الصدر الذكية والاستباقية لصحة الثدي</p>
-                </div>
-            </div>
-            <span class="bg-pink-100 text-brand text-xs px-3 py-1 rounded-full font-medium">نسخة البروتوتايب المتكامل (Hardware + AI)</span>
-        </div>
-    </header>
-
-    <!-- Main Container -->
-    <main class="max-w-5xl mx-auto px-4 pb-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-        
-        <!-- لوحة المدخلات ونظام الـ NFC -->
-        <div class="bg-white p-6 rounded-2xl shadow-md border border-pink-100 md:col-span-1 space-y-4">
-            <h2 class="text-lg font-bold text-gray-800 flex items-center">
-                <span class="ml-2">📱</span> إدخال أو سحب قراءات القطعة
-            </h2>
-            
-            <!-- زر قراءة NFC الفعلي من الهاردوير -->
-            <div class="bg-pink-50 p-4 rounded-xl border border-pink-200 text-center">
-                <p class="text-xs text-gray-600 mb-2">استخدمي هاتفك لقراءة البيانات لاسلكياً من شريحة ST25DV:</p>
-                <button onclick="readNFCData()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-lg shadow transition duration-200 text-sm flex items-center justify-center space-x-2 space-x-reverse">
-                    <span>📡</span>
-                    <span>قراءة NFC الحية (Web NFC)</span>
-                </button>
-                <p id="nfcStatus" class="text-[11px] text-gray-500 mt-2">يتطلب متصفح يدعم Web NFC (مثل Chrome على Android)</p>
-            </div>
-
-            <hr class="border-gray-100">
-
-            <!-- المحاكاة اليدوية للاختبار -->
-            <div class="space-y-3">
-                <p class="text-xs font-bold text-gray-500">أو الإدخال اليدوي لمحاكاة الأيام والأرباع:</p>
-                <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1">رقم يوم المراقبة (Day)</label>
-                    <input type="number" id="dayInput" value="30" class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-brand focus:outline-none">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1">رباعي الثدي المستهدف</label>
-                    <select id="quadrantInput" class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-brand focus:outline-none">
-                        <option value="Left_Upper">الربع العلوي الأيسر (Left Upper)</option>
-                        <option value="Left_Lower">الربع السفلي الأيسر (Left Lower)</option>
-                        <option value="Right_Upper">الربع العلوي الأيمن (Right Upper)</option>
-                        <option value="Right_Lower">الربع السفلي الأيمن (Right Lower)</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1">درجة حرارة الحساس (°C)</label>
-                    <input type="number" step="0.1" id="tempInput" value="37.4" class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-brand focus:outline-none">
-                </div>
-
-                <button onclick="analyzeReading()" class="w-full bg-brand hover:bg-brand-dark text-white font-bold py-2.5 rounded-xl shadow-lg transition duration-200 text-sm">
-                    تحليل وتحديث خط الأساس (AI)
-                </button>
-            </div>
+    <div class="container">
+        <!-- الهيدر الموحد: شعار الموقع -->
+        <div class="logo-area">
+            <h1>FemSense</h1>
+            <p>منظومة المتابعة الصحية الذكية والوقائية</p>
         </div>
 
-        <!-- لوحة النتائج والتقارير (Results & Reports) -->
-        <div class="space-y-6 md:col-span-2">
-            
-            <!-- حالة النظام الفورية -->
-            <div id="statusCard" class="bg-white p-6 rounded-2xl shadow-md border-r-4 border-emerald-500">
-                <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider">حالة النظام والإنذار</h3>
-                <p id="statusText" class="text-lg font-bold text-emerald-600 mt-1">✅ طبيعي - القراءة ضمن خط الأساس الشخصي[cite: 2]</p>
-                <p id="reportText" class="text-sm text-gray-600 mt-2">القراءات مستقرة وضمن البصمة الحرارية الطبيعية للمستخدمة.</p>
+        <!-- الشاشة 1: تسجيل الدخول أو إنشاء الحساب -->
+        <div id="screen-1" class="screen active">
+            <div class="form-group">
+                <label>البريد الإلكتروني أو معرف المستخدم</label>
+                <input type="text" class="form-control" placeholder="name@example.com">
             </div>
-
-            <!-- الخريطة الحرارية التفاعلية (Thermal Heatmap View) -->
-            <div class="bg-white p-6 rounded-2xl shadow-md border border-pink-100">
-                <h3 class="text-md font-bold text-brand-dark mb-3 flex items-center">
-                    <span class="ml-2">🗺️</span> الخريطة الحرارية الموزعة لأرباع الثدي مع مرور الأيام
-                </h3>
-                <p class="text-xs text-gray-500 mb-4">تدرج الألوان يوضح البؤر الحرارية وأماكن الانحراف المستمر[cite: 2]:</p>
-                
-                <!-- شبكة الخريطة الحرارية -->
-                <div class="grid grid-cols-4 gap-2 text-center text-xs font-bold">
-                    <div class="bg-gray-100 p-2 rounded text-gray-600">العلوي الأيمن</div>
-                    <div class="bg-gray-100 p-2 rounded text-gray-600">العلوي الأيسر</div>
-                    <div class="bg-gray-100 p-2 rounded text-gray-600">السفلي الأيمن</div>
-                    <div class="bg-gray-100 p-2 rounded text-gray-600">السفلي الأيسر</div>
-
-                    <div class="bg-pink-100 text-brand p-4 rounded-lg">36.6°C<br><span class="text-[10px] font-normal">مستقر</span></div>
-                    <div id="heatmapLeftUpper" class="bg-pink-100 text-brand p-4 rounded-lg transition-all duration-300">36.7°C<br><span id="statusLeftUpper" class="text-[10px] font-normal">مستقر</span></div>
-                    <div class="bg-pink-100 text-brand p-4 rounded-lg">36.5°C<br><span class="text-[10px] font-normal">مستقر</span></div>
-                    <div class="bg-pink-100 text-brand p-4 rounded-lg">36.6°C<br><span class="text-[10px] font-normal">مستقر</span></div>
-                </div>
+            <div class="form-group">
+                <label>كلمة المرور</label>
+                <input type="password" class="form-control" placeholder="••••••••">
             </div>
-
-            <!-- تقرير الطبيبة المختصة -->
-            <div class="bg-white p-6 rounded-2xl shadow-md border border-pink-100">
-                <h3 class="text-md font-bold text-brand-dark mb-3 flex items-center">
-                    <span class="ml-2">📄</span> التقرير الإكلينيكي الجاهز للطبيبة المختصة
-                </h3>
-                <div id="doctorReport" class="bg-pink-50 p-4 rounded-xl text-xs font-mono text-gray-700 leading-relaxed whitespace-pre-line border border-pink-200">
-                    لا توجد تقارير إكلينيكية مطلوبة حالياً. الحالة مستقرة[cite: 2].
-                </div>
-            </div>
-
+            <button class="btn" onclick="goToScreen('screen-2')">تسجيل الدخول / بدء المتابعة</button>
+            <p class="security-note">🔒 بياناتكِ الصحية مشفرة بالكامل لضمان أعلى معايير الخصوصية والأمان.</p>
         </div>
 
-    </main>
+        <!-- الشاشة 2: طريقة الاستخدام والاقتران السريع (NFC Tap) -->
+        <div id="screen-2" class="screen">
+            <div class="illustration-box">
+                <span>📱</span>
+            </div>
+            <div class="step-title">اقتران سريع وآمن</div>
+            <div class="step-desc">قرّبي هاتفك الذكي الآن لتفعيل التزامن ونقل قراءاتك اليومية بسلاسة.</div>
+            <button class="btn" onclick="goToScreen('screen-3')">قرّبي هاتفكِ الآن للتزامن (NFC Tap)</button>
+            <button class="btn btn-secondary" onclick="goToScreen('screen-3')">تخطي مؤقتاً لوحة التحكم</button>
+        </div>
 
-    <!-- JavaScript للربط والتفاعل وتقنية Web NFC -->
+        <!-- الشاشة 3: لوحة التحكم اليومية وبصمة خط الأساس -->
+        <div id="screen-3" class="screen">
+            <div class="status-card">
+                <h4>الحالة العامة: مستقرة</h4>
+                <p>طبيعي - خط الأساس الشخصي ضمن النطاق الآمن.</p>
+            </div>
+            <div class="step-desc" style="text-align: right; margin-bottom: 15px;">
+                <strong>توزيع الأرباع:</strong> جميع القراءات الحرارية والبيوأهدية متزنة اليوم.
+            </div>
+            <button class="btn" onclick="goToScreen('screen-4')">عرض التقرير الإكلينيكي</button>
+        </div>
+
+        <!-- الشاشة 4: التنبيه المستهدف والإنذار المبكر (محاكاة لحالة تتطلب مراجعة) -->
+        <div id="screen-4" class="screen">
+            <div style="background: #fff3e0; border: 1px solid #ffe0b2; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: right;">
+                <h4 style="color: #ef6c00; font-size: 15px; margin-bottom: 4px;">تنبيه استباقي</h4>
+                <p style="color: #f57c00; font-size: 13px;">تم رصد تغير مستمر في [الربع العلوي الأيسر] لأكثر من 3 أيام.</p>
+            </div>
+            <button class="btn" onclick="goToScreen('screen-5')">مراجعة التقرير الإكلينيكي</button>
+            <button class="btn btn-secondary" onclick="alert('تم إرسال الملاحظات بنجاح')">مشاركة الأعراض الظاهرة</button>
+        </div>
+
+        <!-- الشاشة 5: التقرير الطبي الرسمي -->
+        <div id="screen-5" class="screen">
+            <div class="step-title" style="font-size: 16px;">التقرير الطبي الموثق</div>
+            <div class="step-desc" style="text-align: right; font-size: 13px; margin-bottom: 15px;">
+                • المؤشر الحراري: +0.42°C عن خط الأساس.<br>
+                • فترة التغير: مستمر لـ 3 أيام.<br>
+                • الحالة: موصى بمشاركتها مع الطبيبة المختصة.
+            </div>
+            <button class="btn" onclick="alert('جاري تصدير التقرير بصيغة PDF...')">تصدير ومشاركة التقرير (PDF)</button>
+            <button class="btn btn-secondary" onclick="goToScreen('screen-1')">العودة للرئيسية</button>
+        </div>
+
+    </div>
+
+    <!-- سكربت بسيط للتنقل بين الشاشات لتجربة المستخدم (Prototype) -->
     <script>
-        function analyzeReading() {
-            const day = parseFloat(document.getElementById('dayInput').value);
-            const quadrant = document.getElementById('quadrantInput').value;
-            const temp = parseFloat(document.getElementById('tempInput').value);
-            
-            const baseline = 36.7;
-            const deviation = temp - baseline;
-
-            const statusCard = document.getElementById('statusCard');
-            const statusText = document.getElementById('statusText');
-            const reportText = document.getElementById('reportText');
-            const doctorReport = document.getElementById('doctorReport');
-            
-            const heatmapLU = document.getElementById('heatmapLeftUpper');
-            const statusLU = document.getElementById('statusLeftUpper');
-
-            let reportStr = `--- التقرير الأولي ---\n• اليوم: ${day}\n• الربع: ${quadrant}\n• الحرارة: ${temp}°C\n• خط الأساس: ${baseline}°C\n• الانحراف: ${deviation >= 0 ? '+' : ''}${deviation.toFixed(2)}°C`;
-
-            if (deviation > 0.35 && day > 3) {
-                statusCard.className = "bg-white p-6 rounded-2xl shadow-md border-r-4 border-amber-500";
-                statusText.className = "text-lg font-bold text-amber-600 mt-1";
-                statusText.innerHTML = `⚠️ تنبيه مستهدف في [${quadrant}]!`;
-                reportText.innerHTML = "تم رصد ارتفاع حراري متدرج يتجاوز العتبة الشخصية لعدة أيام مستمرة.";
-                
-                if(quadrant === 'Left_Upper') {
-                    heatmapLU.className = "bg-rose-600 text-white p-4 rounded-lg shadow-md transition-all duration-300";
-                    statusLU.innerHTML = "انحراف مرتفع!";
-                }
-
-                doctorReport.innerHTML = `==========================================\n    تقرير طبي معتمد موجه للطبيبة المختصة   \n==========================================\n• الحالة: رصد نمط حراري غير معتاد (تغير نسجي صامت / التهاب)\n• الموقع التشريحي: ${quadrant}\n• مدة استمرار الشذوذ: 3 أيام متتالية فما فوق\n• مؤشر الانحراف: +${deviation.toFixed(2)}°C عن خط الأساس الشخصي\n• التوصية الإكلينيكية: الفحص السريري للتمييز بين الاحتقان الطبيعي والتغيرات المبكرة.\n==========================================`;
-            } else {
-                statusCard.className = "bg-white p-6 rounded-2xl shadow-md border-r-4 border-emerald-500";
-                statusText.className = "text-lg font-bold text-emerald-600 mt-1";
-                statusText.innerHTML = "✅ طبيعي - القراءة ضمن خط الأساس الشخصي[cite: 2]";
-                reportText.innerHTML = reportStr;
-                
-                heatmapLU.className = "bg-pink-100 text-brand p-4 rounded-lg transition-all duration-300";
-                statusLU.innerHTML = "مستقر";
-
-                doctorReport.innerHTML = "لا توجد تقارير إكلينيكية مطلوبة حالياً. الحالة مستقرة[cite: 2].";
-            }
-        }
-
-        // دالة تفعيل قراءة الـ NFC الحقيقية عبر متصفح الجوال
-        async function readNFCData() {
-            const nfcStatus = document.getElementById('nfcStatus');
-            if ('NDEFReader' in window) {
-                try {
-                    const ndef = new NDEFReader();
-                    await ndef.scan();
-                    nfcStatus.innerHTML = "📡 جاري تقريب الهاتف من الشريحة... قُرب الجهاز الآن.";
-                    
-                    ndef.onreading = event => {
-                        const decoder = new TextDecoder();
-                        for (const record of event.message.records) {
-                            if (record.recordType === "text") {
-                                const textData = decoder.decode(record.data);
-                                nfcStatus.innerHTML = "✅ تم استلام القراءة بنجاح: " + textData;
-                                
-                                // استخراج رقم درجة الحرارة من النص القادم من كود C (مثل "37.4 C")
-                                const tempMatch = textData.match(/([\d.]+)/);
-                                if (tempMatch) {
-                                    document.getElementById('tempInput').value = tempMatch[1];
-                                    analyzeReading(); // تشغيل التحليل تلقائياً
-                                }
-                            }
-                        }
-                    };
-                } catch (error) {
-                    nfcStatus.innerHTML = "❌ خطأ في قراءة NFC: " + error;
-                }
-            } else {
-                nfcStatus.innerHTML = "⚠️ متصفحك لا يدعم Web NFC مباشرة. استخدمي الإدخال اليدوي للمحاكاة.";
-            }
+        function goToScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
         }
     </script>
 </body>
